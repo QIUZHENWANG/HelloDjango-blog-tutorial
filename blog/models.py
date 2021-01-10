@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
+from django.shortcuts import reverse
 # Create your models here.
 class Category(models.Model):
     """
@@ -85,6 +85,13 @@ class Post(models.Model):
         verbose_name = "文章"
         verbose_name_plural = verbose_name
         ordering = ["-created_time"]
-
+    
+    def get_absolute_url(self):
+        return reverse('blog:detail', kwargs={'pk':self.pk})
+    
+    def save(self, *args, **kwargs):
+        self.modified_time = timezone.now()
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return self.title
