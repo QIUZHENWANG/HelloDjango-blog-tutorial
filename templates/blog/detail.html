@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load comments_extras %}
 {% block main %}
 <article class="post post-{{ post.pk }}">
   <header class="entry-header">
@@ -16,6 +17,11 @@
     {{ post.body | safe }}
   </div>
 </article>
+<h3>发表评论</h3>
+{% show_comment_form post %}
+<div class="comment-list-panel">
+    {% show_comments post %}
+</div>
 {% endblock main%}
 {% block toc %}
     {% if post.toc %}
