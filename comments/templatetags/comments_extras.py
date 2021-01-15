@@ -24,7 +24,7 @@ def show_comments(context, post):
     '''展示评论数量及内容'''
     
     #post.comment_set.all() 也等价于 Comment.objects.filter(post=post)
-    comment_list = post.comment_set.all().order_by('-created_time')
+    comment_list = post.comment_set.all()
     comment_count = comment_list.count()
     return {
         'comment_count': comment_count,
