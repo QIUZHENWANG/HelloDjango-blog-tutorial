@@ -1,2 +1,3 @@
-_credentials.py
+credentials.py
 fabfile.py
+fabric.yaml
