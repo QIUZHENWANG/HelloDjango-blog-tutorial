@@ -10,11 +10,11 @@ def _get_github_auth_responders():
     """
     username_responder = Responder(
         pattern="Username for 'https://github.com':",
-        response='{}\n'.format(github_username)
+        response='{}\n'.format(c.github_username)
     )
     password_responder = Responder(
-        pattern="Password for 'https://{}@github.com':".format(github_username),
-        response='{}\n'.format(github_password)
+        pattern="Password for 'https://{}@github.com':".format(c.github_username),
+        response='{}\n'.format(c.github_password)
     )
     return [username_responder, password_responder]
 
