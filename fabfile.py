@@ -4,7 +4,7 @@ from credentials import github_username, github_password
 from fabric import Connection
 
 
-def _get_github_auth_responders():
+def _get_github_auth_responders(c):
     """
     返回 GitHub 用户名密码自动填充器
     """
@@ -38,7 +38,7 @@ def deploy(c):
     # 进入项目根目录，从 Git 拉取最新代码
     with con.cd(project_root_path):
         cmd = 'git pull'
-        responders = _get_github_auth_responders()
+        responders = _get_github_auth_responders(c)
         con.run(cmd, watchers=responders)
 
     # 安装依赖，迁移数据库，收集静态文件
