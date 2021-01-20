@@ -1,6 +1,5 @@
 from fabric import task
 from invoke import Responder
-from credentials import github_username, github_password
 from fabric import Connection
 
 
@@ -61,14 +60,3 @@ def test(c):
     con = Connection(host_ip, user_name, connect_kwargs={'password': password})
     result = con.run(cmd, hide=True)
     print(result)
-
-@task()
-def fastg(c):
-    git_path = "G:\python_project\HelloDjango-blog-tutorial"
-    with c.cd(git_path):
-        print("1.")
-        cmd = 'git add .'
-        c.run(cmd)
-        cmd = "git commit -m 'auto_commit'"
-        c.run(cmd)
-        cmd = "git push origin server_version"
