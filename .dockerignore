@@ -1,0 +1,4 @@
+.*
+fabfile.py
+*.sqlite3
+fabric.yaml
