@@ -20,6 +20,9 @@ def detail(request, pk):
     #存在即取，不存在则返回404页面
     post = get_object_or_404(Post, pk=pk)
     
+    #阅读量加1
+    post.increase_views()
+    
     #支持markdown格式文章
     md = markdown.Markdown(extensions=[
         'markdown.extensions.extra',

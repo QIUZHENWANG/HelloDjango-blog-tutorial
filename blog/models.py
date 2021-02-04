@@ -101,3 +101,8 @@ class Post(models.Model):
         
     def __str__(self):
         return self.title
+    
+    #阅读量更新方法
+    def increase_views(self):
+        self.views += 1
+        self.save(update_fields=['views'])
