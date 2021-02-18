@@ -5,16 +5,18 @@ from .models import Post, Category, Tag
 from django.utils.text import slugify
 from markdown.extensions.toc import TocExtension
 from django.views.generic import ListView, DetailView
+from pure_pagination.mixins import PaginationMixin
+
 # Create your views here.
 
 
-class IndexView(ListView):
+class IndexView(PaginationMixin, ListView):
     '''首页展示所有文章的简易信息列表'''
     
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
-
+    paginate_by = 5
 
 
 class PostDetailView(DetailView):
