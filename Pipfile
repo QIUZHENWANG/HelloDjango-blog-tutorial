@@ -10,6 +10,7 @@ gunicorn = "==20.0.4"
 
 [dev-packages]
 fabric = "*"
+faker = "*"
 
 [requires]
 python_version = "3.6"
