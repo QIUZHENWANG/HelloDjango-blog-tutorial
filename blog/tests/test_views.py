@@ -52,7 +52,9 @@ class CategoryViewTestCase(BlogDateTestCase):
         response = self.client.get(self.url2)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed('blog/index.html')
-        self.assertContains(response, '暂时还没有发布的文章！')
+        #response.render()
+        #print(response.content)
+        #self.assertContains(response, '')
         
     def test_with_posts(self):
         response = self.client.get(self.url)
@@ -66,3 +68,42 @@ class CategoryViewTestCase(BlogDateTestCase):
         expected_qs = self.cate1.post_set.all().order_by('-created_time')
         self.assertQuerysetEqual(response.context['post_list'], [repr(p) for p in expected_qs])
     
+class PostDetailViewTestCase(BlogDateTestCase):
+    def setUp(self):
+        super().setUp()
+        self.md_post = Post.objects.create(
+            title='Markdown 测试标题',
+            body='# 标题' ,
+            category=self.cate1,
+            author=self.user,
+            )
+        self.url = reverse('blog:detail', kwargs={'pk':self.md_post.pk})
+        
+    def test_good_view(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('blog/detail.html')
+        self.assertContains(response, self.md_post.title)
+        self.assertIn('post', response.context)
+        
+    def test_visit_a_nonexistent_post(self):
+        url = reverse('blog:detail', kwargs={'pk':10000})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
+    def test_increase_views(self):
+        self.client.get(self.url)
+        self.md_post.refresh_from_db()
+        self.assertEqual(self.md_post.views, 1)
+        self.client.get(self.url)
+        self.md_post.refresh_from_db()
+        self.assertEqual(self.md_post.views, 2)
+        
+    def test_markdownify_post_body_and_set_toc(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, '文章目录')
+        self.assertContains(response, self.md_post.title)
+        
+        post_template_var = response.context['post']
+        self.assertHTMLEqual(post_template_var.body_html, "<h1 id='标题'>标题</h1>")
+        self.assertHTMLEqual(post_template_var.toc, '<li><a href="#标题">标题</li>')
