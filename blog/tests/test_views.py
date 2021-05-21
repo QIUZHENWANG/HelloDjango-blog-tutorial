@@ -4,6 +4,7 @@ from ..models import Post, Category, Tag
 from django.shortcuts import reverse
 from django.contrib.auth.models import User
 from  datetime import timedelta
+from ..feeds import AllPostsRssFeed
 
 class BlogDateTestCase(TestCase):
     def setUp(self):
@@ -107,3 +108,39 @@ class PostDetailViewTestCase(BlogDateTestCase):
         post_template_var = response.context['post']
         self.assertHTMLEqual(post_template_var.body_html, "<h1 id='标题'>标题</h1>")
         self.assertHTMLEqual(post_template_var.toc, '<li><a href="#标题">标题</li>')
+        
+class AdminTestCase(BlogDateTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('admin:blog_post_add')
+        
+    def test_set_author_after_publishing_the_post(self):
+        data = {
+            'title':'测试标题',
+            'body':'测试内容',
+            'category':self.cate1.pk,
+        }
+        self.client.login(username=self.user.username, password='admin')
+        response = self.client.post(self.url, data=data)
+        self.assertEqual(response.status_code, 302)
+        
+        post = Post.objects.all().latest('created_time')
+        self.assertEqual(post.author, self.user)
+        self.assertEqual(post.title, data.get('title'))
+        self.assertEqual(post.category, self.cate1)
+        
+class RSSTestCase(BlogDateTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse('rss')
+        
+    def test_rss_subscription_content(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, AllPostsRssFeed.title)
+        self.assertContains(response, AllPostsRssFeed.description)
+        self.assertContains(response, self.post1.title)
+        self.assertContains(response, self.post2.title)
+        self.assertContains(response, '[%s] %s' % (self.post1.category, self.post1.title))
+        self.assertContains(response, '[%s] %s' % (self.post2.category, self.post2.title))
+        self.assertContains(response, self.post1.body)
+        self.assertContains(response, self.post2.body)
