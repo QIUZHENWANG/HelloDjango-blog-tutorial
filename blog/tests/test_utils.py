@@ -1,4 +1,4 @@
-from Django.test import TestCase
+from django.test import TestCase
 
 class HighlighterTestCase(TestCase):
     def test_highlight(self):
