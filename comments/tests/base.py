@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.test import TestCase
-
+from django.template import Context
 from blog.models import Category, Post
 
 class CommentDataTestCase(TestCase):
@@ -17,4 +17,5 @@ class CommentDataTestCase(TestCase):
         body='测试内容',
         category=self.cate,
         author=self.user,
-    )
+        )
+        self.ctx = Context()
