@@ -68,7 +68,30 @@ class CategoryViewTestCase(BlogDateTestCase):
         self.assertEqual(response.context['post_list'].count(), 1)
         expected_qs = self.cate1.post_set.all().order_by('-created_time')
         self.assertQuerysetEqual(response.context['post_list'], [repr(p) for p in expected_qs])
-    
+
+class TagViewTestCase(BlogDateTestCase):
+        def setUp(self):
+            super().setUp()
+            self.url = reverse('blog:tag',  kwargs={'pk': self.tag1.pk})
+            self.url2 = reverse('blog:tag', kwargs={'pk':self.tag2.pk})
+            
+        def test_visit_a_nonexistent_category(self):
+            url = reverse('blog:tag', kwargs={'pk': 100})
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 404)
+            
+        def test_with_posts(self):
+            response = self.client.get(self.url)
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed('blog/index.html')
+            self.assertContains(response, self.post1.title)
+            self.assertIn('post_list', response.context)
+            self.assertIn('is_paginated', response.context)
+            self.assertIn('page_obj', response.context)
+            self.assertEqual(response.context['post_list'].count(), 1)
+            expected_qs = self.cate1.post_set.all().order_by('-created_time')
+            self.assertQuerysetEqual(response.context['post_list'], [repr(p) for p in expected_qs])
+            
 class PostDetailViewTestCase(BlogDateTestCase):
     def setUp(self):
         super().setUp()

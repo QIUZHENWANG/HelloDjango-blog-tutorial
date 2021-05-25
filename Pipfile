@@ -12,6 +12,7 @@ django-pure-pagination = "*"
 [dev-packages]
 fabric = "*"
 faker = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.6"

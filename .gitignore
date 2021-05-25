@@ -1,3 +1,7 @@
 fabric.yaml
 static/
 .envs/
+htmlcov/
+.coverage.*
+coverage.xml
+*.cover
