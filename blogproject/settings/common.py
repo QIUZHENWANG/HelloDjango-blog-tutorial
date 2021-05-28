@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'pure_pagination', #分页
     'blog.apps.BlogConfig',
     'comments.apps.CommentsConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
