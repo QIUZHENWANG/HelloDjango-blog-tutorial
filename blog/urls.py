@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+
 app_name = 'blog'
 urlpatterns = [
 
@@ -12,5 +13,5 @@ urlpatterns = [
     path('tags/<int:pk>/', views.TagView.as_view(), name='tag'),
     path('search/', views.search, name='search'),
     #path('api/index/', views.index)
-    path('api/index/', views.IndexPostListAPIView.as_view())
+    #path('api/index/', views.IndexPostListAPIView.as_view())
 ]
