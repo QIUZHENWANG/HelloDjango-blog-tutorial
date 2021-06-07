@@ -15,7 +15,9 @@ from rest_framework import status
 
 from .models import Post
 from .serializers import PostListSerializer
-
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import AllowAny
 
 @api_view(http_method_names=["GET"])
 
@@ -24,6 +26,12 @@ def index(request):
     serializer = PostListSerializer(post_list, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
     
+class IndexPostListAPIView(ListAPIView):
+    serializer_class = PostListSerializer
+    queryset = Post.objects.all()
+    pagination_class = PageNumberPagination
+    permission_classes = [AllowAny]
+ 
 class IndexView(PaginationMixin, ListView):
     '''首页展示所有文章的简易信息列表'''
     
