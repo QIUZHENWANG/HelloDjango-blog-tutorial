@@ -123,8 +123,15 @@ PAGINATION_SETTINGS = {
     'SHOW_FIRST_PAGE_WHEN_INVALID': True, # 当请求了不存在页，显示第一页
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
+
 # 其他配置...
 
 STATIC_URL = '/static/'
 # 加入下面的配置
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+

@@ -17,15 +17,17 @@ from .models import Post
 from .serializers import PostListSerializer
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 
 from rest_framework import viewsets
 from rest_framework import mixins
 
-class PostViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class PostViewSet(mixins.ListModelMixin,  viewsets.GenericViewSet):
+    pagination_class = LimitOffsetPagination
     serializer_class = PostListSerializer
     queryset = Post.objects.all()
-    pagination_class = PageNumberPagination
+    #pagination_class = PageNumberPagination
     permission_classes = [AllowAny]
 
 @api_view(http_method_names=["GET"])
